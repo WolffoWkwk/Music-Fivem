@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1325" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Studio Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#1a1325',
+            panel: '#251b34',
+            line: '#382b4b',
+            cream: '#f4eef8',
+            mute: '#a99bb9',
+            saffron: '#f4b63f',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --color-ink: #1a1325;
+      --color-panel: #251b34;
+      --color-line: #382b4b;
+      --color-cream: #f4eef8;
+      --color-mute: #a99bb9;
+      --color-saffron: #f4b63f;
+    }
+
+    html, body {
+      background: var(--color-ink);
+      color: var(--color-cream);
+      font-family: system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: none;
+    }
+
+    /* Custom Seek Slider */
+    .seek {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 28px;
+      background: transparent;
+      cursor: pointer;
+      touch-action: pan-y;
+    }
+    .seek:disabled { opacity: 0.4; }
+    .seek::-webkit-slider-runnable-track {
+      height: 5px;
+      border-radius: 9999px;
+      background: linear-gradient(
+        to right,
+        var(--color-saffron) var(--p, 0%),
+        var(--color-line) var(--p, 0%)
+      );
+    }
+    .seek::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      margin-top: -5.5px;
+      border-radius: 9999px;
+      background: var(--color-cream);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      transition: transform 0.15s ease;
+    }
+    .seek:active::-webkit-slider-thumb {
+      transform: scale(1.25);
+      background: var(--color-saffron);
+    }
+    .seek::-moz-range-track {
+      height: 5px;
+      border-radius: 9999px;
+      background: var(--color-line);
+    }
+    .seek::-moz-range-progress {
+      height: 5px;
+      border-radius: 9999px;
+      background: var(--color-saffron);
+    }
+    .seek::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border: 0;
+      border-radius: 9999px;
+      background: var(--color-cream);
+    }
+
+    /* Piringan Hitam Berputar */
+    .vinyl {
+      aspect-ratio: 1;
+      border-radius: 9999px;
+      background:
+        conic-gradient(transparent 0 20%, rgba(255,255,255,0.09) 25%, transparent 30% 70%, rgba(255,255,255,0.09) 75%, transparent 80%),
+        radial-gradient(circle, var(--color-ink) 0 4%, var(--color-saffron) 4% 20%, transparent 20%),
+        repeating-radial-gradient(circle, #100b19 0 2px, #1d1529 2px 4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      animation: vinyl-spin 8s linear infinite;
+      animation-play-state: paused;
+    }
+    .vinyl[data-playing="true"] {
+      animation-play-state: running;
+    }
+    @keyframes vinyl-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Equalizer Bar Animasi */
+    @keyframes eq {
+      0%, 100% { height: 25%; }
+      50% { height: 100%; }
+    }
+    .eq-bar-1 { animation: eq 0.7s ease-in-out infinite; }
+    .eq-bar-2 { animation: eq 0.5s ease-in-out infinite 0.2s; }
+    .eq-bar-3 { animation: eq 0.8s ease-in-out infinite 0.35s; }
+  </style>
+</head>
+<body class="min-h-dvh flex flex-col selection:bg-saffron selection:text-ink">
+
+  <audio id="audio-player" preload="metadata"></audio>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-20 bg-ink/85 backdrop-blur-md border-b border-line/60 px-4 sm:px-8 py-3.5">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="size-9 rounded-xl bg-saffron/15 border border-saffron/30 grid place-items-center text-saffron">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="3" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight leading-none">Studio Player</h1>
+          <p class="text-[11px] text-mute mt-1 font-mono">Folder music/ • MP3 & FLAC</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Tombol Muat Folder Lokal (HP/Desktop) -->
+        <label class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-saffron/15 hover:bg-saffron/25 border border-saffron/40 text-xs font-medium text-saffron transition active:scale-95 cursor-pointer" title="Pilih file dari penyimpanan perangkat">
+          <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="hidden sm:inline">Buka Lokal</span>
+          <input type="file" id="local-file-input" accept=".mp3,.flac,audio/*" multiple class="hidden" />
+        </label>
+
+        <button id="btn-refresh" class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-panel hover:bg-line/70 border border-line text-xs font-medium text-cream transition active:scale-95 cursor-pointer">
+          <svg id="refresh-icon" class="size-3.5 text-saffron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+          </svg>
+          <span>Refresh</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-8 pt-5 pb-32 lg:pb-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- DESKTOP LEFT DECK -->
+    <section class="hidden lg:flex lg:col-span-5 flex-col items-center bg-panel/70 border border-line rounded-3xl p-7 sticky top-24 shadow-2xl">
+      <div class="relative w-56 my-2">
+        <div id="desktop-vinyl" class="vinyl w-full" data-playing="false"></div>
+        <span id="desktop-format" class="hidden absolute -bottom-2 right-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-ink border border-saffron/40 text-saffron shadow-md">FLAC</span>
+      </div>
+
+      <div class="w-full text-center mt-6">
+        <p id="desktop-status" class="text-[11px] uppercase tracking-widest text-saffron font-semibold">STANDBY</p>
+        <h2 id="desktop-title" class="text-xl font-bold truncate mt-1 px-2">Pilih Lagu</h2>
+        <p id="desktop-sub" class="text-xs text-mute mt-1">Memuat daftar lagu...</p>
+      </div>
+
+      <div class="w-full mt-6">
+        <input id="desktop-seek" type="range" min="0" max="0" step="0.1" value="0" disabled class="seek" />
+        <div class="flex justify-between text-[11px] font-mono text-mute -mt-1">
+          <span id="desktop-current">00:00</span>
+          <span id="desktop-duration">00:00</span>
+        </div>
+      </div>
+
+      <div class="w-full flex items-center justify-between mt-4 px-2">
+        <button id="desktop-shuffle" class="grid size-11 place-items-center rounded-full text-mute hover:bg-panel transition cursor-pointer" title="Shuffle">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+          </svg>
+        </button>
+
+        <div class="flex items-center gap-3">
+          <button id="desktop-prev" class="grid size-11 place-items-center rounded-full text-cream hover:bg-panel transition active:scale-90 cursor-pointer">
+            <svg class="size-6" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
+          </button>
+
+          <button id="desktop-play" class="size-14 rounded-full bg-saffron hover:brightness-110 text-ink grid place-items-center shadow-lg shadow-saffron/20 transition active:scale-95 cursor-pointer">
+            <svg id="desktop-play-icon" class="size-7 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+          </button>
+
+          <button id="desktop-next" class="grid size-11 place-items-center rounded-full text-cream hover:bg-panel transition active:scale-90 cursor-pointer">
+            <svg class="size-6" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
+          </button>
+        </div>
+
+        <button id="desktop-repeat" class="relative grid size-11 place-items-center rounded-full text-saffron bg-saffron/10 transition cursor-pointer" title="Repeat">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" />
+            <path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg>
+          <span id="desktop-repeat-badge" class="hidden absolute text-[9px] font-bold">1</span>
+        </button>
+      </div>
+
+      <div class="w-full flex items-center gap-3 mt-6 pt-4 border-t border-line/70">
+        <button id="desktop-mute" class="text-mute hover:text-cream cursor-pointer">
+          <svg id="desktop-vol-icon" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />
+          </svg>
+        </button>
+        <input id="desktop-volume" type="range" min="0" max="1" step="0.02" value="1" style="--p: 100%" class="seek" />
+      </div>
+    </section>
+
+    <!-- PLAYLIST SECTION -->
+    <section class="lg:col-span-7 flex flex-col gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <h2 class="text-sm font-semibold text-cream">Daftar Lagu</h2>
+          <span id="track-count" class="px-2 py-0.5 text-xs font-mono rounded-full bg-panel border border-line text-saffron">0</span>
+        </div>
+
+        <div class="relative w-full sm:w-64">
+          <svg class="size-4 text-mute absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+          </svg>
+          <input id="search-input" type="text" placeholder="Cari judul atau format..." class="w-full pl-9 pr-8 py-2 text-sm bg-panel border border-line rounded-full text-cream placeholder:text-mute/70 focus:border-saffron outline-none transition" />
+          <button id="search-clear" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-mute hover:text-cream text-xs cursor-pointer">✕</button>
+        </div>
+      </div>
+
+      <div id="playlist-container" class="space-y-2"></div>
+    </section>
+  </main>
+
+  <!-- MOBILE MINI PLAYER -->
+  <div id="mobile-mini-player" class="hidden lg:hidden fixed bottom-3 inset-x-3 z-30">
+    <div class="bg-panel/95 backdrop-blur-xl border border-line rounded-2xl shadow-2xl overflow-hidden">
+      <div class="w-full h-1 bg-ink">
+        <div id="mini-progress" class="h-full bg-saffron transition-all duration-150" style="width: 0%"></div>
+      </div>
+      <div class="flex items-center justify-between gap-2 p-2.5 pl-3">
+        <div id="mini-expand-trigger" class="flex items-center gap-3 min-w-0 flex-1 cursor-pointer">
+          <div id="mini-vinyl" class="vinyl size-10 shrink-0" data-playing="false"></div>
+          <div class="min-w-0">
+            <p id="mini-title" class="text-sm font-semibold text-cream truncate">Judul Lagu</p>
+            <div class="flex items-center gap-2 text-[11px] text-mute font-mono">
+              <span id="mini-format" class="text-saffron">FLAC</span>
+              <span>•</span>
+              <span id="mini-time">00:00 / 00:00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1 shrink-0">
+          <button id="mini-play" class="size-10 rounded-full bg-saffron text-ink grid place-items-center active:scale-90 transition cursor-pointer">
+            <svg id="mini-play-icon" class="size-5 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+          </button>
+          <button id="mini-next" class="grid size-10 place-items-center rounded-full text-cream active:bg-ink transition cursor-pointer">
+            <svg class="size-5" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE FULLSCREEN PLAYER DRAWER -->
+  <div id="mobile-sheet" class="hidden lg:hidden fixed inset-0 z-50 bg-ink flex flex-col justify-between p-6 pb-10">
+    <div class="flex items-center justify-between">
+      <button id="sheet-close" class="grid size-11 place-items-center rounded-full bg-panel/70 text-cream active:scale-90 transition cursor-pointer">
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6" /></svg>
+      </button>
+      <div class="text-center">
+        <span class="text-[10px] uppercase tracking-widest text-saffron font-bold block">Now Playing</span>
+        <span id="sheet-index" class="text-xs text-mute font-mono">1 / 1</span>
+      </div>
+      <span id="sheet-format" class="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-panel border border-saffron/40 text-saffron">FLAC</span>
+    </div>
+
+    <div class="my-auto flex flex-col items-center">
+      <div class="w-64 sm:w-72 max-w-[72vw]">
+        <div id="sheet-vinyl" class="vinyl w-full" data-playing="false"></div>
+      </div>
+      <div class="w-full text-center mt-8 px-2">
+        <h2 id="sheet-title" class="text-xl font-bold text-cream line-clamp-2 leading-snug">Judul Lagu</h2>
+        <p id="sheet-filename" class="text-xs text-mute mt-1.5 font-mono truncate">filename.flac</p>
+      </div>
+    </div>
+
+    <div class="w-full space-y-4">
+      <div>
+        <input id="sheet-seek" type="range" min="0" max="0" step="0.1" value="0" class="seek" />
+        <div class="flex justify-between text-xs font-mono text-mute">
+          <span id="sheet-current">00:00</span>
+          <span id="sheet-duration">00:00</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between px-2">
+        <button id="sheet-shuffle" class="grid size-11 place-items-center rounded-full text-mute transition cursor-pointer">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+          </svg>
+        </button>
+
+        <button id="sheet-prev" class="grid size-12 place-items-center rounded-full text-cream active:scale-90 transition cursor-pointer">
+          <svg class="size-7" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
+        </button>
+
+        <button id="sheet-play" class="size-16 rounded-full bg-saffron text-ink grid place-items-center shadow-xl shadow-saffron/25 active:scale-95 transition cursor-pointer">
+          <svg id="sheet-play-icon" class="size-8 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+        </button>
+
+        <button id="sheet-next" class="grid size-12 place-items-center rounded-full text-cream active:scale-90 transition cursor-pointer">
+          <svg class="size-7" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
+        </button>
+
+        <button id="sheet-repeat" class="relative grid size-11 place-items-center rounded-full text-saffron bg-saffron/15 transition cursor-pointer">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" />
+            <path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg>
+          <span id="sheet-repeat-badge" class="hidden absolute text-[9px] font-bold">1</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // DAFTAR LAGU CADANGAN (Isi nama file yang ada di dalam folder music/ Anda)
+    // Jika di-host di GitHub Pages, script otomatis mendeteksi isi folder music/!
+    // =========================================================================
+    const FALLBACK_FILES = [
+      "02. Shame On a Nigga.flac",
+      "04. Wu-Tang - 7th Chamber.flac",
+      "08. C.R.E.A.M. (Cash Rules Everything Around Me).flac",
+      "RHYNO (from GTAVI - The Album).flac",
+      "Warung Madura.flac"
+    ];
+
+    const state = {
+      tracks: [],
+      filteredTracks: [],
+      currentIndex: 0,
+      isPlaying: false,
+      isShuffle: false,
+      repeatMode: 'all', // 'off' | 'all' | 'one'
+      searchQuery: ''
+    };
+
+    const audio = document.getElementById('audio-player');
+    const ICON_PLAY = '<path d="M8 5v14l11-7z" />';
+    const ICON_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z" />';
+
+    function formatTime(sec) {
+      if (!sec || isNaN(sec)) return '00:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function parseFileToTrack(fileName, idx, customUrl = null) {
+      const extMatch = fileName.match(/\.([^.]+)$/);
+      const ext = extMatch ? extMatch[1].toUpperCase() : 'AUDIO';
+      const title = fileName.replace(/\.[^.]+$/, '').replace(/[_]/g, ' ');
+      return {
+        id: idx + 1,
+        title,
+        fileName,
+        url: customUrl || `music/${encodeURIComponent(fileName)}`,
+        format: ext
+      };
+    }
+
+    // Deteksi otomatis folder music/ di GitHub Pages atau pakai daftar cadangan
+    async function loadTracks() {
+      const refreshIcon = document.getElementById('refresh-icon');
+      refreshIcon.classList.add('animate-spin');
+
+      let loaded = [];
+      try {
+        const host = window.location.hostname;
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        if (host.endsWith('github.io') && pathParts.length > 0) {
+          const owner = host.split('.')[0];
+          const repo = pathParts[0];
+          const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/music`);
+          if (res.ok) {
+            const items = await res.json();
+            const audioItems = items.filter(f => /\.(mp3|flac|wav|ogg|m4a)$/i.test(f.name));
+            loaded = audioItems.map((f, i) => parseFileToTrack(f.name, i));
+          }
+        }
+      } catch (e) {
+        console.warn('Menggunakan daftar lagu lokal/cadangan');
+      }
+
+      if (loaded.length === 0) {
+        loaded = FALLBACK_FILES.map((name, i) => parseFileToTrack(name, i));
+      }
+
+      state.tracks = loaded;
+      applyFilter();
+      if (state.tracks.length > 0 && !audio.src) {
+        loadTrackAtIndex(0, false);
+      }
+      refreshIcon.classList.remove('animate-spin');
+    }
+
+    function applyFilter() {
+      const q = state.searchQuery.trim().toLowerCase();
+      state.filteredTracks = q
+        ? state.tracks.filter(t => t.title.toLowerCase().includes(q) || t.format.toLowerCase().includes(q))
+        : [...state.tracks];
+      renderPlaylist();
+    }
+
+    function renderPlaylist() {
+      const container = document.getElementById('playlist-container');
+      document.getElementById('track-count').textContent = state.filteredTracks.length;
+      const activeTrack = state.tracks[state.currentIndex];
+
+      if (state.filteredTracks.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 px-4 bg-panel/40 border border-dashed border-line rounded-3xl">
+            <p class="text-sm font-medium text-cream">Tidak ada lagu ditemukan</p>
+            <p class="text-xs text-mute mt-1">Pastikan file berada di folder <code class="text-saffron">music/</code> atau klik tombol <b>Buka Lokal</b> di kanan atas.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = state.filteredTracks.map((track, idx) => {
+        const isSelected = activeTrack && activeTrack.id === track.id;
+        return `
+          <div onclick="selectTrackById(${track.id})" class="group flex items-center justify-between gap-3 p-3.5 rounded-2xl border transition cursor-pointer active:scale-[0.99] ${
+            isSelected
+              ? 'bg-panel border-saffron/60 shadow-lg shadow-black/20'
+              : 'bg-panel/40 hover:bg-panel/80 border-line/60'
+          }">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <div class="size-9 rounded-xl grid place-items-center shrink-0 font-mono text-xs transition ${
+                isSelected ? 'bg-saffron text-ink font-bold' : 'bg-ink/80 text-mute group-hover:text-cream'
+              }">
+                ${isSelected && state.isPlaying
+                  ? `<div class="flex items-end gap-0.5 h-3.5">
+                       <span class="w-0.5 bg-ink eq-bar-1"></span>
+                       <span class="w-0.5 bg-ink eq-bar-2"></span>
+                       <span class="w-0.5 bg-ink eq-bar-3"></span>
+                     </div>`
+                  : idx + 1}
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-medium truncate ${isSelected ? 'text-saffron font-semibold' : 'text-cream'}">${track.title}</p>
+                <p class="text-[11px] text-mute truncate mt-0.5">${track.fileName}</p>
+              </div>
+            </div>
+            <span class="shrink-0 text-[10px] font-mono font-semibold px-2 py-1 rounded-md border ${
+              track.format === 'FLAC' ? 'bg-saffron/10 text-saffron border-saffron/30' : 'bg-ink text-mute border-line'
+            }">${track.format}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updatePlayerUI() {
+      const track = state.tracks[state.currentIndex];
+      if (!track) return;
+
+      // Tampilkan mini player di mobile
+      document.getElementById('mobile-mini-player').classList.remove('hidden');
+
+      // Update teks judul & metadata
+      document.getElementById('desktop-title').textContent = track.title;
+      document.getElementById('desktop-sub').textContent = `Track ${state.currentIndex + 1} dari ${state.tracks.length}`;
+      document.getElementById('desktop-status').textContent = state.isPlaying ? 'NOW PLAYING' : 'PAUSED';
+      const dFmt = document.getElementById('desktop-format');
+      dFmt.textContent = track.format;
+      dFmt.classList.remove('hidden');
+
+      document.getElementById('mini-title').textContent = track.title;
+      document.getElementById('mini-format').textContent = track.format;
+
+      document.getElementById('sheet-title').textContent = track.title;
+      document.getElementById('sheet-filename').textContent = track.fileName;
+      document.getElementById('sheet-format').textContent = track.format;
+      document.getElementById('sheet-index').textContent = `${state.currentIndex + 1} / ${state.tracks.length}`;
+
+      // Animasi piringan hitam
+      ['desktop-vinyl', 'mini-vinyl', 'sheet-vinyl'].forEach(id => {
+        document.getElementById(id).setAttribute('data-playing', state.isPlaying);
+      });
+
+      // Ikon Play / Pause
+      const iconHtml = state.isPlaying ? ICON_PAUSE : ICON_PLAY;
+      ['desktop-play-icon', 'mini-play-icon', 'sheet-play-icon'].forEach(id => {
+        const el = document.getElementById(id);
+        el.innerHTML = iconHtml;
+        el.classList.toggle('translate-x-0.5', !state.isPlaying);
+      });
+
+      document.getElementById('desktop-seek').disabled = false;
+      renderPlaylist();
+
+      // Media Session (Lockscreen HP)
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track.title,
+          artist: 'Studio Player',
+          album: `${track.format} Audio`
+        });
+      }
+    }
+
+    function loadTrackAtIndex(index, autoPlay = true) {
+      if (state.tracks.length === 0) return;
+      state.currentIndex = index;
+      const track = state.tracks[index];
+      audio.src = track.url;
+      audio.load();
+      if (autoPlay) {
+        audio.play().then(() => {
+          state.isPlaying = true;
+          updatePlayerUI();
+        }).catch(() => {
+          state.isPlaying = false;
+          updatePlayerUI();
+        });
+      } else {
+        updatePlayerUI();
+      }
+    }
+
+    function selectTrackById(id) {
+      const idx = state.tracks.findIndex(t => t.id === id);
+      if (idx !== -1) loadTrackAtIndex(idx, true);
+    }
+
+    function togglePlay() {
+      if (state.tracks.length === 0) return;
+      if (state.isPlaying) {
+        audio.pause();
+        state.isPlaying = false;
+        updatePlayerUI();
+      } else {
+        audio.play().then(() => {
+          state.isPlaying = true;
+          updatePlayerUI();
+        });
+      }
+    }
+
+    function nextTrack() {
+      if (state.tracks.length === 0) return;
+      if (state.repeatMode === 'one') {
+        audio.currentTime = 0;
+        audio.play();
+        return;
+      }
+      let next = 0;
+      if (state.isShuffle && state.tracks.length > 1) {
+        do { next = Math.floor(Math.random() * state.tracks.length); } while (next === state.currentIndex);
+      } else {
+        if (state.currentIndex === state.tracks.length - 1 && state.repeatMode === 'off') {
+          state.isPlaying = false;
+          updatePlayerUI();
+          return;
+        }
+        next = (state.currentIndex + 1) % state.tracks.length;
+      }
+      loadTrackAtIndex(next, true);
+    }
+
+    function prevTrack() {
+      if (state.tracks.length === 0) return;
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
+        return;
+      }
+      const prev = (state.currentIndex - 1 + state.tracks.length) % state.tracks.length;
+      loadTrackAtIndex(prev, true);
+    }
+
+    // Event Audio Time & Progress
+    audio.addEventListener('timeupdate', () => {
+      const cur = audio.currentTime || 0;
+      const dur = audio.duration || 0;
+      const pct = dur > 0 ? (cur / dur) * 100 : 0;
+
+      ['desktop-seek', 'sheet-seek'].forEach(id => {
+        const el = document.getElementById(id);
+        el.max = dur;
+        el.value = cur;
+        el.style.setProperty('--p', `${pct}%`);
+      });
+
+      document.getElementById('mini-progress').style.width = `${pct}%`;
+      document.getElementById('desktop-current').textContent = formatTime(cur);
+      document.getElementById('desktop-duration').textContent = formatTime(dur);
+      document.getElementById('sheet-current').textContent = formatTime(cur);
+      document.getElementById('sheet-duration').textContent = formatTime(dur);
+      document.getElementById('mini-time').textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+    });
+
+    audio.addEventListener('ended', nextTrack);
+
+    // Seek Sliders
+    ['desktop-seek', 'sheet-seek'].forEach(id => {
+      document.getElementById(id).addEventListener('input', (e) => {
+        audio.currentTime = Number(e.target.value);
+      });
+    });
+
+    // Transport Controls
+    ['desktop-play', 'mini-play', 'sheet-play'].forEach(id => document.getElementById(id).onclick = togglePlay);
+    ['desktop-next', 'mini-next', 'sheet-next'].forEach(id => document.getElementById(id).onclick = nextTrack);
+    ['desktop-prev', 'sheet-prev'].forEach(id => document.getElementById(id).onclick = prevTrack);
+
+    // Shuffle & Repeat
+    function toggleShuffle() {
+      state.isShuffle = !state.isShuffle;
+      ['desktop-shuffle', 'sheet-shuffle'].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.toggle('text-saffron', state.isShuffle);
+        el.classList.toggle('bg-saffron/15', state.isShuffle);
+        el.classList.toggle('text-mute', !state.isShuffle);
+      });
+    }
+    ['desktop-shuffle', 'sheet-shuffle'].forEach(id => document.getElementById(id).onclick = toggleShuffle);
+
+    function cycleRepeat() {
+      state.repeatMode = state.repeatMode === 'off' ? 'all' : state.repeatMode === 'all' ? 'one' : 'off';
+      ['desktop-repeat', 'sheet-repeat'].forEach(id => {
+        const el = document.getElementById(id);
+        const active = state.repeatMode !== 'off';
+        el.classList.toggle('text-saffron', active);
+        el.classList.toggle('bg-saffron/15', active);
+        el.classList.toggle('text-mute', !active);
+      });
+      ['desktop-repeat-badge', 'sheet-repeat-badge'].forEach(id => {
+        document.getElementById(id).classList.toggle('hidden', state.repeatMode !== 'one');
+      });
+    }
+    ['desktop-repeat', 'sheet-repeat'].forEach(id => document.getElementById(id).onclick = cycleRepeat);
+
+    // Desktop Volume
+    const volSlider = document.getElementById('desktop-volume');
+    volSlider.addEventListener('input', (e) => {
+      const v = Number(e.target.value);
+      audio.volume = v;
+      audio.muted = v === 0;
+      volSlider.style.setProperty('--p', `${v * 100}%`);
+    });
+    document.getElementById('desktop-mute').onclick = () => {
+      audio.muted = !audio.muted;
+      volSlider.style.setProperty('--p', `${audio.muted ? 0 : audio.volume * 100}%`);
+    };
+
+    // Mobile Fullscreen Sheet Toggle
+    document.getElementById('mini-expand-trigger').onclick = () => {
+      document.getElementById('mobile-sheet').classList.remove('hidden');
+    };
+    document.getElementById('sheet-close').onclick = () => {
+      document.getElementById('mobile-sheet').classList.add('hidden');
+    };
+
+    // Search Input
+    const searchInput = document.getElementById('search-input');
+    const searchClear = document.getElementById('search-clear');
+    searchInput.addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      searchClear.classList.toggle('hidden', !state.searchQuery);
+      applyFilter();
+    });
+    searchClear.onclick = () => {
+      searchInput.value = '';
+      state.searchQuery = '';
+      searchClear.classList.add('hidden');
+      applyFilter();
+    };
+
+    // Buka File Lokal Langsung dari HP/PC
+    document.getElementById('local-file-input').addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      if (files.length === 0) return;
+      state.tracks = files.map((file, idx) => parseFileToTrack(file.name, idx, URL.createObjectURL(file)));
+      applyFilter();
+      loadTrackAtIndex(0, true);
+    });
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'INPUT') return;
+      if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+      else if (e.code === 'ArrowRight') audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5);
+      else if (e.code === 'ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime - 5);
+      else if (e.key.toLowerCase() === 'm') audio.muted = !audio.muted;
+    });
+
+    // Media Session Handlers
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('play', togglePlay);
+      navigator.mediaSession.setActionHandler('pause', togglePlay);
+      navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
+      navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
+    }
+
+    document.getElementById('btn-refresh').onclick = loadTracks;
+    loadTracks();
+  </script>
+</body>
+</html>
