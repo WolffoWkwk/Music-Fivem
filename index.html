@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#1a1325" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Studio Player — Immersive Audio & Lyrics</title>
+  <title>Studio Player — Immersive Audio, Lyrics & Vocal Coach</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -42,7 +42,6 @@
       overscroll-behavior-y: none;
     }
 
-    /* Ambient Beat Glow */
     .ambient-orb {
       position: fixed;
       border-radius: 9999px;
@@ -52,7 +51,6 @@
       transition: transform 0.12s ease-out, opacity 0.4s ease;
     }
 
-    /* Custom Seek & Volume Slider */
     .seek {
       -webkit-appearance: none;
       appearance: none;
@@ -66,11 +64,7 @@
     .seek::-webkit-slider-runnable-track {
       height: 5px;
       border-radius: 9999px;
-      background: linear-gradient(
-        to right,
-        var(--color-saffron) var(--p, 0%),
-        var(--color-line) var(--p, 0%)
-      );
+      background: linear-gradient(to right, var(--color-saffron) var(--p, 0%), var(--color-line) var(--p, 0%));
     }
     .seek::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -80,7 +74,7 @@
       border-radius: 9999px;
       background: var(--color-cream);
       box-shadow: 0 2px 8px rgba(0,0,0,0.65);
-      transition: transform 0.15s ease, background-color 0.15s ease;
+      transition: transform 0.15s ease;
     }
     .seek:active::-webkit-slider-thumb {
       transform: scale(1.3);
@@ -104,7 +98,6 @@
       background: var(--color-cream);
     }
 
-    /* Realistic Grooved Vinyl Disc */
     .vinyl {
       aspect-ratio: 1;
       border-radius: 9999px;
@@ -112,20 +105,13 @@
         conic-gradient(transparent 0 18%, rgba(255,255,255,0.12) 24%, transparent 30% 68%, rgba(255,255,255,0.12) 74%, transparent 80%),
         radial-gradient(circle, #0e0a15 0 4%, var(--color-saffron) 4.5% 19%, #140e1f 19.5% 21%, transparent 21.5%),
         repeating-radial-gradient(circle, #0e0916 0 2px, #1d152a 2px 4px);
-      box-shadow:
-        0 25px 60px rgba(0,0,0,0.75),
-        inset 0 0 0 2px rgba(255,255,255,0.06);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.75), inset 0 0 0 2px rgba(255,255,255,0.06);
       animation: vinyl-spin 7.5s linear infinite;
       animation-play-state: paused;
     }
-    .vinyl[data-playing="true"] {
-      animation-play-state: running;
-    }
-    @keyframes vinyl-spin {
-      to { transform: rotate(360deg); }
-    }
+    .vinyl[data-playing="true"] { animation-play-state: running; }
+    @keyframes vinyl-spin { to { transform: rotate(360deg); } }
 
-    /* Equalizer Bars */
     @keyframes eq {
       0%, 100% { height: 22%; }
       50% { height: 100%; }
@@ -134,7 +120,6 @@
     .eq-bar-2 { animation: eq 0.48s ease-in-out infinite 0.18s; }
     .eq-bar-3 { animation: eq 0.78s ease-in-out infinite 0.32s; }
 
-    /* Spotify-Style Synchronized Lyrics */
     .lyrics-scroll {
       mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%);
@@ -149,21 +134,16 @@
     }
     .lyric-line.active {
       color: var(--color-saffron);
-      transform: scale(1.04);
+      transform: scale(1.03);
       font-weight: 800;
       text-shadow: 0 0 24px rgba(244, 182, 63, 0.35);
     }
-    .lyric-line.past {
-      color: rgba(244, 238, 248, 0.45);
-    }
-    .lyric-line.future {
-      color: rgba(169, 155, 185, 0.55);
-    }
+    .lyric-line.past { color: rgba(244, 238, 248, 0.45); }
+    .lyric-line.future { color: rgba(169, 155, 185, 0.55); }
   </style>
 </head>
 <body class="min-h-dvh flex flex-col selection:bg-saffron selection:text-ink relative overflow-x-hidden">
 
-  <!-- Dynamic Ambient Lighting -->
   <div id="orb-1" class="ambient-orb size-80 bg-saffron/15 -top-20 -left-20"></div>
   <div id="orb-2" class="ambient-orb size-96 bg-purple-600/20 bottom-10 -right-24"></div>
 
@@ -181,21 +161,20 @@
         <div>
           <h1 class="text-base sm:text-lg font-bold tracking-tight leading-none flex items-center gap-2">
             Studio Player
-            <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-saffron/15 text-saffron border border-saffron/30">Hi-Fi</span>
+            <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-saffron/15 text-saffron border border-saffron/30">Vocal Lab</span>
           </h1>
-          <p class="text-[11px] text-mute mt-1 font-mono">music/ • Lossless & Genius Lyrics</p>
+          <p class="text-[11px] text-mute mt-1 font-mono">music/ • Lossless, Genius Lyrics & Phonation Coach</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <label class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-saffron/15 hover:bg-saffron/25 border border-saffron/40 text-xs font-medium text-saffron transition active:scale-95 cursor-pointer" title="Muat file audio dari perangkat">
+        <label class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-saffron/15 hover:bg-saffron/25 border border-saffron/40 text-xs font-medium text-saffron transition active:scale-95 cursor-pointer">
           <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
           </svg>
           <span>Buka Lokal</span>
           <input type="file" id="local-file-input" accept=".mp3,.flac,.wav,.m4a,.ogg,audio/*" multiple class="hidden" />
         </label>
-
         <button id="btn-refresh" class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-panel hover:bg-line/70 border border-line text-xs font-medium text-cream transition active:scale-95 cursor-pointer">
           <svg id="refresh-icon" class="size-3.5 text-saffron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
@@ -212,7 +191,6 @@
     
     <!-- DESKTOP LEFT DECK -->
     <section class="hidden lg:flex lg:col-span-5 flex-col items-center bg-panel/75 backdrop-blur-xl border border-line rounded-3xl p-7 sticky top-24 shadow-2xl overflow-hidden">
-      <!-- Live Audio Frequency Canvas -->
       <canvas id="desktop-visualizer" width="360" height="90" class="w-full h-16 opacity-80 pointer-events-none -mb-4"></canvas>
 
       <div class="relative w-52 my-2">
@@ -238,64 +216,55 @@
       <!-- Controls -->
       <div class="w-full flex items-center justify-between mt-4 px-1">
         <button id="desktop-shuffle" class="grid size-10 place-items-center rounded-full text-mute hover:bg-ink/60 transition cursor-pointer" title="Shuffle">
-          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
-          </svg>
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" /></svg>
         </button>
 
         <div class="flex items-center gap-3">
           <button id="desktop-prev" class="grid size-11 place-items-center rounded-full text-cream hover:bg-ink/60 transition active:scale-90 cursor-pointer">
             <svg class="size-6" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
           </button>
-
           <button id="desktop-play" class="size-14 rounded-full bg-saffron hover:brightness-110 text-ink grid place-items-center shadow-lg shadow-saffron/25 transition active:scale-95 cursor-pointer">
             <svg id="desktop-play-icon" class="size-7 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
           </button>
-
           <button id="desktop-next" class="grid size-11 place-items-center rounded-full text-cream hover:bg-ink/60 transition active:scale-90 cursor-pointer">
             <svg class="size-6" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
           </button>
         </div>
 
         <button id="desktop-repeat" class="relative grid size-10 place-items-center rounded-full text-saffron bg-saffron/15 transition cursor-pointer" title="Repeat">
-          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" />
-            <path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" />
-          </svg>
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" /><path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" /></svg>
           <span id="desktop-repeat-badge" class="hidden absolute text-[9px] font-bold">1</span>
         </button>
       </div>
 
-      <!-- Desktop Volume & Lyrics Toggle -->
+      <!-- Volume -->
       <div class="w-full flex items-center gap-3 mt-5 pt-4 border-t border-line/70">
         <button id="desktop-mute" class="text-mute hover:text-cream cursor-pointer" title="Mute (M)">
-          <svg id="desktop-vol-icon" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />
-          </svg>
+          <svg id="desktop-vol-icon" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" /></svg>
         </button>
         <input id="desktop-volume" type="range" min="0" max="1" step="0.01" value="1" style="--p: 100%" class="seek" />
         <span id="desktop-vol-pct" class="text-[11px] font-mono text-mute w-9 text-right">100%</span>
       </div>
     </section>
 
-    <!-- RIGHT PANEL: TABS (PLAYLIST vs GENIUS SYNC LYRICS) -->
+    <!-- RIGHT PANEL: TABS (PLAYLIST vs GENIUS LYRICS vs VOCAL COACH) -->
     <section class="lg:col-span-7 flex flex-col gap-4">
       <!-- Mode Switcher & Search -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="inline-flex p-1 rounded-full bg-panel border border-line self-start">
-          <button id="tab-playlist" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-saffron text-ink transition cursor-pointer">
+        <div class="inline-flex p-1 rounded-full bg-panel border border-line self-start overflow-x-auto">
+          <button id="tab-playlist" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-saffron text-ink transition cursor-pointer whitespace-nowrap">
             Daftar Lagu (<span id="track-count">0</span>)
           </button>
-          <button id="tab-lyrics" class="px-4 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer flex items-center gap-1.5">
-            <span>Lirik Genius</span>
-            <span id="lyrics-live-dot" class="hidden size-1.5 rounded-full bg-saffron animate-ping"></span>
+          <button id="tab-lyrics" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer whitespace-nowrap">
+            Lirik Genius
+          </button>
+          <button id="tab-coach" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer whitespace-nowrap flex items-center gap-1.5">
+            <span>🎤 Vocal Coach</span>
           </button>
         </div>
 
         <div id="search-wrapper" class="relative w-full sm:w-64">
-          <svg class="size-4 text-mute absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
-          </svg>
+          <svg class="size-4 text-mute absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
           <input id="search-input" type="text" placeholder="Cari judul atau format..." class="w-full pl-9 pr-8 py-2 text-sm bg-panel border border-line rounded-full text-cream placeholder:text-mute/70 focus:border-saffron outline-none transition" />
           <button id="search-clear" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-mute hover:text-cream text-xs cursor-pointer">✕</button>
         </div>
@@ -304,63 +273,104 @@
       <!-- VIEW 1: PLAYLIST -->
       <div id="view-playlist" class="space-y-2"></div>
 
-      <!-- VIEW 2: SPOTIFY-STYLE GENIUS LYRICS -->
+      <!-- VIEW 2: GENIUS LYRICS -->
       <div id="view-lyrics" class="hidden bg-panel/75 backdrop-blur-xl border border-line rounded-3xl p-5 sm:p-7 flex flex-col gap-4 shadow-2xl">
-        <!-- Genius Toolbar -->
         <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-line/70">
           <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded bg-[#ffff64] text-black font-black text-[10px] tracking-wider uppercase">GENIUS</span>
             <span id="lyrics-track-label" class="text-xs font-semibold text-cream truncate max-w-[180px] sm:max-w-xs">Belum ada lagu</span>
           </div>
-
           <div class="flex items-center gap-1.5">
             <a id="btn-open-genius" href="https://genius.com/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-full bg-ink hover:bg-line/60 border border-line text-[11px] font-medium text-saffron transition flex items-center gap-1">
-              <span>Cari di Genius.com</span>
+              <span>Cari di Genius</span>
               <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
             </a>
-            <button id="btn-toggle-paste" class="px-3 py-1.5 rounded-full bg-saffron/15 hover:bg-saffron/25 border border-saffron/40 text-[11px] font-semibold text-saffron transition cursor-pointer">
-              + Tempel Lirik
-            </button>
+            <button id="btn-toggle-paste" class="px-3 py-1.5 rounded-full bg-saffron/15 hover:bg-saffron/25 border border-saffron/40 text-[11px] font-semibold text-saffron transition cursor-pointer">+ Tempel Lirik</button>
           </div>
         </div>
 
-        <!-- Paste / Edit Genius Lyrics Drawer -->
         <div id="lyrics-editor" class="hidden space-y-2.5 bg-ink/80 p-4 rounded-2xl border border-line">
-          <div class="flex items-center justify-between">
-            <p class="text-xs font-medium text-cream">Tempel lirik dari Genius.com di bawah ini:</p>
-            <span class="text-[10px] text-mute font-mono">Auto-Sync Aktif</span>
-          </div>
-          <textarea id="lyrics-textarea" rows="6" placeholder="[Verse 1]&#10;Tempel baris lirik dari Genius.com di sini...&#10;Sistem akan otomatis menyinkronkan setiap baris dengan durasi lagu!" class="w-full p-3 rounded-xl bg-panel border border-line text-sm text-cream placeholder:text-mute/50 focus:border-saffron outline-none resize-y"></textarea>
+          <p class="text-xs font-medium text-cream">Tempel lirik dari Genius.com:</p>
+          <textarea id="lyrics-textarea" rows="5" placeholder="[Verse 1]&#10;Tempel lirik di sini..." class="w-full p-3 rounded-xl bg-panel border border-line text-sm text-cream placeholder:text-mute/50 focus:border-saffron outline-none resize-y"></textarea>
           <div class="flex items-center justify-between gap-2">
-            <button id="btn-clear-lyrics" class="text-xs text-mute hover:text-red-400 cursor-pointer">Hapus Lirik</button>
+            <button id="btn-clear-lyrics" class="text-xs text-mute hover:text-red-400 cursor-pointer">Hapus</button>
             <div class="flex gap-2">
-              <button id="btn-cancel-lyrics" class="px-3 py-1.5 rounded-full bg-panel text-xs text-mute hover:text-cream cursor-pointer">Batal</button>
-              <button id="btn-save-lyrics" class="px-4 py-1.5 rounded-full bg-saffron text-ink text-xs font-bold cursor-pointer">Simpan & Sinkronkan</button>
+              <button id="btn-cancel-lyrics" class="px-3 py-1.5 rounded-full bg-panel text-xs text-mute cursor-pointer">Batal</button>
+              <button id="btn-save-lyrics" class="px-4 py-1.5 rounded-full bg-saffron text-ink text-xs font-bold cursor-pointer">Simpan & Sync</button>
             </div>
           </div>
         </div>
 
-        <!-- Synchronized Lyrics Display -->
         <div id="lyrics-container" class="lyrics-scroll h-[52vh] sm:h-[56vh] overflow-y-auto px-2 py-12 space-y-5 text-left">
-          <div class="text-center py-12 space-y-3">
-            <p class="text-sm text-mute">Memuat lirik...</p>
+          <div class="text-center py-12"><p class="text-sm text-mute">Memuat lirik...</p></div>
+        </div>
+
+        <div id="lyrics-sync-bar" class="hidden pt-3 border-t border-line/70 flex items-center justify-between text-[11px] text-mute">
+          <span>Ketuk baris untuk lompat ke audio</span>
+          <button id="btn-stamp-next" class="px-3 py-1 rounded-full bg-panel hover:bg-line border border-line text-saffron font-mono cursor-pointer">⏱ Sync Baris Berikutnya</button>
+        </div>
+      </div>
+
+      <!-- VIEW 3: VOCAL COACH & PHONATION LAB (FITUR BARU) -->
+      <div id="view-coach" class="hidden bg-panel/75 backdrop-blur-xl border border-line rounded-3xl p-5 sm:p-7 flex flex-col gap-5 shadow-2xl">
+        <div class="flex items-center justify-between pb-3 border-b border-line/70">
+          <div>
+            <h2 class="text-sm font-bold text-cream flex items-center gap-2">
+              <span>🎤 Vocal & Phonation Lab</span>
+              <span class="px-2 py-0.5 rounded-full bg-saffron/15 text-saffron text-[10px] font-mono">Bait & Pengucapan</span>
+            </h2>
+            <p class="text-xs text-mute mt-0.5">Latih pengucapan cepat (connected speech) dan hafalkan bait lagu bagian demi bagian.</p>
           </div>
         </div>
 
-        <!-- Manual Tap-to-Sync Helper Bar -->
-        <div id="lyrics-sync-bar" class="hidden pt-3 border-t border-line/70 flex items-center justify-between text-[11px] text-mute">
-          <span>Ketuk baris lirik untuk lompat ke bagian lagu</span>
-          <button id="btn-stamp-next" class="px-3 py-1 rounded-full bg-panel hover:bg-line border border-line text-saffron font-mono cursor-pointer active:scale-95">
-            ⏱ Sync Baris Berikutnya
-          </button>
+        <!-- Speed & A-B Loop Controls (Knob Slow-Fast) -->
+        <div class="bg-ink/70 p-4 rounded-2xl border border-line space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-saffron uppercase tracking-wider">Kontrol Kecepatan & Latihan (Slow / Fast)</span>
+            <span id="speed-display" class="text-xs font-mono px-2.5 py-0.5 rounded bg-panel border border-line text-cream">1.0x (Normal)</span>
+          </div>
+
+          <!-- Speed Buttons Slider -->
+          <div class="grid grid-cols-5 gap-2">
+            <button onclick="setPlaybackSpeed(0.5)" class="speed-btn py-1.5 rounded-xl bg-panel border border-line text-xs font-mono text-mute hover:text-cream cursor-pointer">0.5x</button>
+            <button onclick="setPlaybackSpeed(0.75)" class="speed-btn py-1.5 rounded-xl bg-panel border border-line text-xs font-mono text-mute hover:text-cream cursor-pointer">0.75x</button>
+            <button onclick="setPlaybackSpeed(1.0)" class="speed-btn py-1.5 rounded-xl bg-saffron text-ink text-xs font-mono font-bold cursor-pointer">1.0x</button>
+            <button onclick="setPlaybackSpeed(1.25)" class="speed-btn py-1.5 rounded-xl bg-panel border border-line text-xs font-mono text-mute hover:text-cream cursor-pointer">1.25x</button>
+            <button onclick="setPlaybackSpeed(1.5)" class="speed-btn py-1.5 rounded-xl bg-panel border border-line text-xs font-mono text-mute hover:text-cream cursor-pointer">1.5x</button>
+          </div>
+
+          <!-- A-B Loop Section -->
+          <div class="pt-2 border-t border-line/50 flex flex-wrap items-center justify-between gap-2">
+            <div class="text-xs text-mute">
+              Loop Section: <span id="loop-status" class="font-mono text-cream font-semibold">Nonaktif</span>
+            </div>
+            <div class="flex gap-2">
+              <button id="btn-set-loop" onclick="toggleABLoop()" class="px-3 py-1.5 rounded-full bg-panel hover:bg-line border border-line text-xs font-semibold text-saffron cursor-pointer">
+                🔁 Set Loop 5 Detik Ini
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Phonation / Pronunciation Breakdown List -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-mute">Panduan Pengucapan Bait (Phonetic & Connected Speech)</h3>
+            <span class="text-[11px] text-saffron font-mono">Ketuk untuk putar bagian ini</span>
+          </div>
+
+          <div id="phonetic-list" class="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1">
+            <!-- Diisi dinamis oleh JavaScript berdasarkan lirik lagu -->
+            <div class="p-3.5 rounded-2xl bg-panel/40 border border-line text-center py-8">
+              <p class="text-xs text-mute">Putar lagu atau muat lirik untuk melihat panduan pengucapan bait.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- ===================================================================== -->
-  <!-- MOBILE STICKY MINI PLAYER                                             -->
-  <!-- ===================================================================== -->
+  <!-- MOBILE MINI PLAYER -->
   <div id="mobile-mini-player" class="hidden lg:hidden fixed bottom-3 inset-x-3 z-30">
     <div class="bg-panel/95 backdrop-blur-xl border border-line rounded-2xl shadow-2xl overflow-hidden">
       <div class="w-full h-1 bg-ink">
@@ -380,10 +390,8 @@
         </div>
 
         <div class="flex items-center gap-1 shrink-0">
-          <button id="mini-lyrics-btn" class="grid size-9 place-items-center rounded-full text-mute hover:text-saffron active:bg-ink transition cursor-pointer" title="Lirik">
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 6h16M4 12h10M4 18h14" />
-            </svg>
+          <button id="mini-coach-btn" class="grid size-9 place-items-center rounded-full text-mute hover:text-saffron active:bg-ink transition cursor-pointer" title="Vocal Coach">
+            🎤
           </button>
           <button id="mini-play" class="size-10 rounded-full bg-saffron text-ink grid place-items-center active:scale-90 transition cursor-pointer">
             <svg id="mini-play-icon" class="size-5 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
@@ -396,42 +404,34 @@
     </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- MOBILE FULLSCREEN PLAYER SHEET (WITH VOLUME SLIDER & LYRICS BUTTON)   -->
-  <!-- ===================================================================== -->
+  <!-- MOBILE FULLSCREEN PLAYER SHEET -->
   <div id="mobile-sheet" class="hidden lg:hidden fixed inset-0 z-50 bg-ink/98 backdrop-blur-2xl flex flex-col justify-between p-6 pb-8 overflow-y-auto">
-    <!-- Top Bar -->
     <div class="flex items-center justify-between">
-      <button id="sheet-close" class="grid size-11 place-items-center rounded-full bg-panel/80 text-cream active:scale-90 transition cursor-pointer" aria-label="Tutup">
+      <button id="sheet-close" class="grid size-11 place-items-center rounded-full bg-panel/80 text-cream active:scale-90 transition cursor-pointer">
         <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6" /></svg>
       </button>
       <div class="text-center">
         <span class="text-[10px] uppercase tracking-widest text-saffron font-bold block">Now Playing</span>
         <span id="sheet-index" class="text-xs text-mute font-mono">1 / 1</span>
       </div>
-      <button id="sheet-open-lyrics" class="px-3 py-1.5 rounded-full text-[11px] font-mono font-bold bg-panel border border-saffron/40 text-saffron active:scale-95 transition cursor-pointer">
-        LIRIK
+      <button id="sheet-open-coach" class="px-3 py-1.5 rounded-full text-[11px] font-mono font-bold bg-panel border border-saffron/40 text-saffron active:scale-95 transition cursor-pointer">
+        🎤 COACH
       </button>
     </div>
 
-    <!-- Center Vinyl + Live Visualizer -->
     <div class="my-auto flex flex-col items-center py-4">
       <div class="relative w-56 sm:w-64 max-w-[65vw]">
         <div id="sheet-vinyl" class="vinyl w-full" data-playing="false"></div>
         <span id="sheet-format" class="absolute -bottom-2 right-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-panel border border-saffron/40 text-saffron">FLAC</span>
       </div>
-
       <canvas id="mobile-visualizer" width="320" height="60" class="w-full max-w-xs h-12 mt-4 opacity-85 pointer-events-none"></canvas>
-
       <div class="w-full text-center mt-2 px-2">
         <h2 id="sheet-title" class="text-xl font-bold text-cream line-clamp-2 leading-snug">Judul Lagu</h2>
         <p id="sheet-filename" class="text-xs text-mute mt-1 font-mono truncate">filename.flac</p>
       </div>
     </div>
 
-    <!-- Bottom Controls + Mobile Volume Slider -->
     <div class="w-full space-y-4">
-      <!-- Seek Scrubber -->
       <div>
         <input id="sheet-seek" type="range" min="0" max="0" step="0.05" value="0" class="seek" />
         <div class="flex justify-between text-xs font-mono text-mute">
@@ -440,52 +440,26 @@
         </div>
       </div>
 
-      <!-- Transport Buttons -->
       <div class="flex items-center justify-between px-1">
-        <button id="sheet-shuffle" class="grid size-11 place-items-center rounded-full text-mute transition cursor-pointer">
-          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
-          </svg>
-        </button>
-
-        <button id="sheet-prev" class="grid size-12 place-items-center rounded-full text-cream active:scale-90 transition cursor-pointer">
-          <svg class="size-7" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
-        </button>
-
+        <button id="sheet-shuffle" class="grid size-11 place-items-center rounded-full text-mute transition cursor-pointer"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" /></svg></button>
+        <button id="sheet-prev" class="grid size-12 place-items-center rounded-full text-cream active:scale-90 transition cursor-pointer"><svg class="size-7" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg></button>
         <button id="sheet-play" class="size-16 rounded-full bg-saffron text-ink grid place-items-center shadow-xl shadow-saffron/30 active:scale-95 transition cursor-pointer">
           <svg id="sheet-play-icon" class="size-8 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
         </button>
-
-        <button id="sheet-next" class="grid size-12 place-items-center rounded-full text-cream active:scale-90 transition cursor-pointer">
-          <svg class="size-7" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
-        </button>
-
-        <button id="sheet-repeat" class="relative grid size-11 place-items-center rounded-full text-saffron bg-saffron/15 transition cursor-pointer">
-          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" />
-            <path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" />
-          </svg>
-          <span id="sheet-repeat-badge" class="hidden absolute text-[9px] font-bold">1</span>
-        </button>
+        <button id="sheet-next" class="grid size-12 place-items-center rounded-full text-cream active:scale-90 transition cursor-pointer"><svg class="size-7" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg></button>
+        <button id="sheet-repeat" class="relative grid size-11 place-items-center rounded-full text-saffron bg-saffron/15 transition cursor-pointer"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" /><path d="M7 23l-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" /></svg></button>
       </div>
 
-      <!-- MOBILE VOLUME SLIDER (Fixes phone volume control) -->
+      <!-- Mobile Volume Slider -->
       <div class="flex items-center gap-3 pt-2 px-2 bg-panel/60 border border-line/70 rounded-2xl py-2">
-        <button id="sheet-mute" class="text-mute hover:text-cream p-1 cursor-pointer" aria-label="Mute">
-          <svg id="sheet-vol-icon" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07" />
-          </svg>
-        </button>
-        <input id="sheet-volume" type="range" min="0" max="1" step="0.01" value="1" style="--p: 100%" class="seek" aria-label="Volume HP" />
+        <button id="sheet-mute" class="text-mute hover:text-cream p-1 cursor-pointer"><svg id="sheet-vol-icon" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07" /></svg></button>
+        <input id="sheet-volume" type="range" min="0" max="1" step="0.01" value="1" style="--p: 100%" class="seek" />
         <span id="sheet-vol-pct" class="text-[11px] font-mono text-saffron w-9 text-right">100%</span>
       </div>
     </div>
   </div>
 
   <script>
-    // =========================================================================
-    // DAFTAR LAGU CADANGAN (Folder music/)
-    // =========================================================================
     const FALLBACK_FILES = [
       "02. Shame On a Nigga.flac",
       "04. Wu-Tang - 7th Chamber.flac",
@@ -502,9 +476,10 @@
       isShuffle: false,
       repeatMode: 'all',
       searchQuery: '',
-      activeTab: 'playlist', // 'playlist' | 'lyrics'
-      lyricsLines: [], // [{ time: number, text: string }]
-      activeLyricIdx: -1
+      activeTab: 'playlist', // 'playlist' | 'lyrics' | 'coach'
+      lyricsLines: [],
+      activeLyricIdx: -1,
+      loopState: { active: false, start: 0, end: 5 }
     };
 
     const audio = document.getElementById('audio-player');
@@ -513,13 +488,7 @@
     const ICON_VOL_ON = '<path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />';
     const ICON_VOL_MUTE = '<path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6" />';
 
-    // =========================================================================
-    // WEB AUDIO API VISUALIZER + GAIN BOOSTER
-    // =========================================================================
-    let audioCtx = null;
-    let analyser = null;
-    let gainNode = null;
-    let dataArray = null;
+    let audioCtx = null, analyser = null, gainNode = null, dataArray = null;
 
     function initAudioEngine() {
       if (audioCtx) {
@@ -541,14 +510,13 @@
         dataArray = new Uint8Array(analyser.frequencyBinCount);
         renderVisualizerLoop();
       } catch (e) {
-        console.warn('Web Audio visualizer fallback:', e);
+        console.warn('Audio Visualizer fallback active');
       }
     }
 
     function renderVisualizerLoop() {
       requestAnimationFrame(renderVisualizerLoop);
       if (!analyser || !state.isPlaying) return;
-
       analyser.getByteFrequencyData(dataArray);
       const bass = dataArray[2] || 0;
       const scale = 1 + (bass / 255) * 0.25;
@@ -558,17 +526,13 @@
         const canvas = document.getElementById(canvasId);
         if (!canvas || canvas.offsetParent === null) return;
         const ctx = canvas.getContext('2d');
-        const w = canvas.width;
-        const h = canvas.height;
+        const w = canvas.width, h = canvas.height;
         ctx.clearRect(0, 0, w, h);
-
-        const bars = 24;
-        const barW = (w / bars) - 4;
+        const bars = 24, barW = (w / bars) - 4;
         for (let i = 0; i < bars; i++) {
           const val = dataArray[i] / 255;
           const barH = Math.max(4, val * (h - 6));
-          const x = i * (barW + 4) + 2;
-          const y = (h - barH) / 2;
+          const x = i * (barW + 4) + 2, y = (h - barH) / 2;
           ctx.fillStyle = `rgba(244, 182, 63, ${0.3 + val * 0.7})`;
           ctx.beginPath();
           ctx.roundRect(x, y, barW, barH, 4);
@@ -577,82 +541,114 @@
       });
     }
 
-    // =========================================================================
-    // VOLUME CONTROL (SYNCED BETWEEN DESKTOP & MOBILE SHEET)
-    // =========================================================================
     function setMasterVolume(val) {
       const clamped = Math.max(0, Math.min(1, val));
       audio.volume = clamped;
       audio.muted = clamped === 0;
       if (gainNode) gainNode.gain.value = clamped;
-
       const pct = Math.round(clamped * 100);
       ['desktop-volume', 'sheet-volume'].forEach(id => {
         const el = document.getElementById(id);
         el.value = clamped;
         el.style.setProperty('--p', `${pct}%`);
       });
-      ['desktop-vol-pct', 'sheet-vol-pct'].forEach(id => {
-        document.getElementById(id).textContent = `${pct}%`;
-      });
-      ['desktop-vol-icon', 'sheet-vol-icon'].forEach(id => {
-        document.getElementById(id).innerHTML = clamped === 0 ? ICON_VOL_MUTE : ICON_VOL_ON;
-      });
+      ['desktop-vol-pct', 'sheet-vol-pct'].forEach(id => { document.getElementById(id).textContent = `${pct}%`; });
+      ['desktop-vol-icon', 'sheet-vol-icon'].forEach(id => { document.getElementById(id).innerHTML = clamped === 0 ? ICON_VOL_MUTE : ICON_VOL_ON; });
     }
 
     ['desktop-volume', 'sheet-volume'].forEach(id => {
-      document.getElementById(id).addEventListener('input', (e) => {
-        setMasterVolume(Number(e.target.value));
-      });
+      document.getElementById(id).addEventListener('input', (e) => setMasterVolume(Number(e.target.value)));
     });
-
     ['desktop-mute', 'sheet-mute'].forEach(id => {
-      document.getElementById(id).addEventListener('click', () => {
-        setMasterVolume(audio.muted || audio.volume === 0 ? 1 : 0);
-      });
+      document.getElementById(id).addEventListener('click', () => setMasterVolume(audio.muted || audio.volume === 0 ? 1 : 0));
     });
 
-    // =========================================================================
-    // GENIUS LYRICS + SYNCHRONIZATION ENGINE
-    // =========================================================================
+    // --- PHONETIC PRONUNCIATION GENERATOR ---
+    function generatePhonetic(text) {
+      // Mengubah frasa Inggris umum menjadi pengucapan bersambung (connected speech)
+      return text
+        .toLowerCase()
+        .replace(/a little bit/g, 'a litle bida')
+        .replace(/loneliness/g, 'lonlines')
+        .replace(/going to/g, 'gonna')
+        .replace(/want to/g, 'wanna')
+        .replace(/because/g, "'cuz")
+        .replace(/and/g, "n'")
+        .replace(/out of/g, 'oudov');
+    }
+
+    function renderPhoneticCoach() {
+      const container = document.getElementById('phonetic-list');
+      if (!state.lyricsLines || state.lyricsLines.length === 0) {
+        container.innerHTML = `<div class="p-4 rounded-2xl bg-panel/40 border border-line text-center"><p class="text-xs text-mute">Belum ada lirik aktif. Tambahkan lirik di tab Genius terlebih dahulu.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = state.lyricsLines.map((line, idx) => {
+        const phoneticText = generatePhonetic(line.text);
+        return `
+          <div onclick="seekToLyric(${idx})" class="p-3.5 rounded-2xl bg-panel/40 hover:bg-panel/80 border border-line/70 transition cursor-pointer flex flex-col gap-1.5 group">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono text-saffron bg-saffron/10 px-2 py-0.5 rounded border border-saffron/20">${formatTime(line.time)}</span>
+              <span class="text-[11px] text-mute group-hover:text-cream">Ketuk untuk putar ⟳</span>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-cream">${line.text}</p>
+              <p class="text-xs text-saffron font-mono mt-0.5">💬 Pengucapan: <span class="italic text-cream/90">${phoneticText}</span></p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- SPEED & LOOP CONTROL ---
+    function setPlaybackSpeed(rate) {
+      audio.playbackRate = rate;
+      document.getElementById('speed-display').textContent = `${rate}x ${rate === 1 ? '(Normal)' : rate < 1 ? '(Lambat)' : '(Cepat)'}`;
+      document.querySelectorAll('.speed-btn').forEach(btn => {
+        const match = btn.textContent.includes(rate);
+        btn.className = match
+          ? 'speed-btn py-1.5 rounded-xl bg-saffron text-ink text-xs font-mono font-bold cursor-pointer'
+          : 'speed-btn py-1.5 rounded-xl bg-panel border border-line text-xs font-mono text-mute hover:text-cream cursor-pointer';
+      });
+    }
+
+    function toggleABLoop() {
+      state.loopState.active = !state.loopState.active;
+      if (state.loopState.active) {
+        state.loopState.start = Math.max(0, audio.currentTime - 1);
+        state.loopState.end = audio.currentTime + 5; // Loop 5 detik
+        document.getElementById('loop-status').textContent = `${formatTime(state.loopState.start)} - ${formatTime(state.loopState.end)}`;
+        document.getElementById('btn-set-loop').className = 'px-3 py-1.5 rounded-full bg-saffron text-ink text-xs font-semibold cursor-pointer';
+        document.getElementById('btn-set-loop').textContent = '⏹ Matikan Loop';
+      } else {
+        document.getElementById('loop-status').textContent = 'Nonaktif';
+        document.getElementById('btn-set-loop').className = 'px-3 py-1.5 rounded-full bg-panel hover:bg-line border border-line text-xs font-semibold text-saffron cursor-pointer';
+        document.getElementById('btn-set-loop').textContent = '🔁 Set Loop 5 Detik Ini';
+      }
+    }
+
+    // --- GENIUS LYRICS PARSER ---
     function cleanSongQuery(title) {
-      return title
-        .replace(/^\d+[\.\-\s]+/, '') // Hapus nomor track "02. "
-        .replace(/\(.*?\)|\[.*?\]/g, '') // Hapus "(from GTAVI...)"
-        .trim();
+      return title.replace(/^\d+[\.\-\s]+/, '').replace(/\(.*?\)|\[.*?\]/g, '').trim();
     }
 
     function parseRawLyrics(rawText, totalDuration) {
-      const lines = rawText
-        .split('\n')
-        .map(l => l.trim())
-        .filter(Boolean);
-
-      // Cek apakah format LRC bertimestamp [00:12.34]
+      const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
       const lrcRegex = /^\[(\d{1,2}):(\d{2}(?:\.\d{1,3})?)\](.*)/;
       const hasLrc = lines.some(l => lrcRegex.test(l));
 
       if (hasLrc) {
-        return lines
-          .map(line => {
-            const m = line.match(lrcRegex);
-            if (!m) return null;
-            const time = parseInt(m[1], 10) * 60 + parseFloat(m[2]);
-            return { time, text: m[3].trim() || '♪' };
-          })
-          .filter(Boolean);
+        return lines.map(line => {
+          const m = line.match(lrcRegex);
+          if (!m) return null;
+          return { time: parseInt(m[1], 10) * 60 + parseFloat(m[2]), text: m[3].trim() || '♪' };
+        }).filter(Boolean);
       }
 
-      // Auto-distribusi waktu cerdas untuk lirik teks dari Genius.com
       const dur = totalDuration && !isNaN(totalDuration) && totalDuration > 10 ? totalDuration : 180;
-      const introOffset = Math.min(8, dur * 0.05);
-      const usableDur = Math.max(10, dur - introOffset - 4);
-      const step = usableDur / Math.max(1, lines.length);
-
-      return lines.map((text, i) => ({
-        time: Number((introOffset + i * step).toFixed(2)),
-        text
-      }));
+      const step = (dur - 10) / Math.max(1, lines.length);
+      return lines.map((text, i) => ({ time: Number((5 + i * step).toFixed(2)), text }));
     }
 
     async function loadLyricsForTrack(track) {
@@ -667,12 +663,9 @@
       if (savedRaw) {
         state.lyricsLines = parseRawLyrics(savedRaw, audio.duration);
         renderLyricsUI();
+        renderPhoneticCoach();
         return;
       }
-
-      // Coba ambil otomatis lirik tersinkronisasi dari database publik berdasarkan judul
-      const container = document.getElementById('lyrics-container');
-      container.innerHTML = `<p class="text-center text-xs text-mute py-12 animate-pulse">Mencari sinkronisasi lirik untuk "${cleanName}"...</p>`;
 
       try {
         const res = await fetch(`https://lrclib.net/api/search?q=${encodeURIComponent(cleanName)}`);
@@ -684,75 +677,54 @@
             localStorage.setItem(storageKey, raw);
             state.lyricsLines = parseRawLyrics(raw, audio.duration);
             renderLyricsUI();
+            renderPhoneticCoach();
             return;
           }
         }
       } catch (e) {
-        console.warn('Auto lyric lookup skipped:', e);
+        console.warn('Auto lyric lookup skipped');
       }
 
       state.lyricsLines = [];
       renderLyricsUI();
+      renderPhoneticCoach();
     }
 
     function renderLyricsUI() {
       const container = document.getElementById('lyrics-container');
       const syncBar = document.getElementById('lyrics-sync-bar');
-      const liveDot = document.getElementById('lyrics-live-dot');
       const track = state.tracks[state.currentIndex];
       const cleanName = track ? cleanSongQuery(track.title) : '';
 
       if (state.lyricsLines.length === 0) {
         syncBar.classList.add('hidden');
-        liveDot.classList.add('hidden');
         container.innerHTML = `
           <div class="text-center py-10 px-4 space-y-4">
             <div class="size-12 rounded-2xl bg-[#ffff64]/15 border border-[#ffff64]/40 text-[#ffff64] grid place-items-center mx-auto font-black text-lg">G</div>
-            <div>
-              <p class="text-sm font-semibold text-cream">Lirik belum tersimpan untuk lagu ini</p>
-              <p class="text-xs text-mute mt-1 max-w-sm mx-auto leading-relaxed">
-                Klik tombol <b>Cari di Genius.com</b> untuk menyalin lirik resmi, lalu klik <b>+ Tempel Lirik</b> agar tersinkronisasi otomatis dengan lagu.
-              </p>
-            </div>
-            <div class="flex justify-center gap-2 pt-2">
-              <a href="https://genius.com/search?q=${encodeURIComponent(cleanName)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-full bg-[#ffff64] text-black text-xs font-bold shadow-lg">
-                Buka di Genius.com ↗
-              </a>
-              <button onclick="openLyricsEditor()" class="px-4 py-2 rounded-full bg-panel border border-saffron/50 text-saffron text-xs font-semibold cursor-pointer">
-                + Tempel Lirik
-              </button>
-            </div>
+            <p class="text-sm font-semibold text-cream">Lirik belum tersedia untuk lagu ini</p>
+            <button onclick="openLyricsEditor()" class="px-4 py-2 rounded-full bg-saffron text-ink text-xs font-bold cursor-pointer">+ Tempel Lirik dari Genius</button>
           </div>`;
         return;
       }
 
       syncBar.classList.remove('hidden');
-      liveDot.classList.remove('hidden');
-      state.activeLyricIdx = -1;
-
-      container.innerHTML = state.lyricsLines.map((line, i) => {
-        const isHeader = /^\[.*\]$/.test(line.text);
-        return `
-          <div id="lyric-line-${i}" onclick="seekToLyric(${i})" class="lyric-line cursor-pointer select-none ${
-            isHeader
-              ? 'text-xs font-mono uppercase tracking-widest text-saffron/70 pt-3'
-              : 'text-lg sm:text-2xl font-bold leading-snug future'
-          }">
-            ${line.text}
-          </div>
-        `;
-      }).join('');
+      container.innerHTML = state.lyricsLines.map((line, i) => `
+        <div id="lyric-line-${i}" onclick="seekToLyric(${i})" class="lyric-line cursor-pointer select-none text-lg sm:text-2xl font-bold leading-snug future">
+          ${line.text}
+        </div>
+      `).join('');
     }
 
     function syncLyricsHighlight(currentTime) {
+      if (state.loopState.active && currentTime >= state.loopState.end) {
+        audio.currentTime = state.loopState.start;
+      }
+
       if (state.lyricsLines.length === 0) return;
       let activeIdx = 0;
       for (let i = 0; i < state.lyricsLines.length; i++) {
-        if (currentTime >= state.lyricsLines[i].time) {
-          activeIdx = i;
-        } else {
-          break;
-        }
+        if (currentTime >= state.lyricsLines[i].time) activeIdx = i;
+        else break;
       }
 
       if (activeIdx === state.activeLyricIdx) return;
@@ -764,14 +736,9 @@
         el.classList.remove('active', 'past', 'future');
         if (i === activeIdx) {
           el.classList.add('active');
-          if (state.activeTab === 'lyrics') {
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        } else if (i < activeIdx) {
-          el.classList.add('past');
-        } else {
-          el.classList.add('future');
-        }
+          if (state.activeTab === 'lyrics') el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (i < activeIdx) el.classList.add('past');
+        else el.classList.add('future');
       });
     }
 
@@ -782,30 +749,22 @@
       if (!state.isPlaying) togglePlay();
     }
 
-    // Stempel waktu manual baris berikutnya saat lagu diputar
     document.getElementById('btn-stamp-next').onclick = () => {
       if (state.lyricsLines.length === 0) return;
       const nextIdx = Math.min(state.lyricsLines.length - 1, state.activeLyricIdx + 1);
       state.lyricsLines[nextIdx].time = Number(audio.currentTime.toFixed(2));
       const track = state.tracks[state.currentIndex];
       if (track) {
-        const lrcString = state.lyricsLines.map(l => {
-          const m = Math.floor(l.time / 60);
-          const s = (l.time % 60).toFixed(2).padStart(5, '0');
-          return `[${String(m).padStart(2, '0')}:${s}] ${l.text}`;
-        }).join('\n');
+        const lrcString = state.lyricsLines.map(l => `[${Math.floor(l.time/60).toString().padStart(2,'0')}:${(l.time%60).toFixed(2).padStart(5,'0')}] ${l.text}`).join('\n');
         localStorage.setItem(`studio_lyrics_${track.fileName}`, lrcString);
       }
       syncLyricsHighlight(audio.currentTime);
     };
 
     function openLyricsEditor() {
-      const editor = document.getElementById('lyrics-editor');
+      document.getElementById('lyrics-editor').classList.remove('hidden');
       const track = state.tracks[state.currentIndex];
-      if (track) {
-        document.getElementById('lyrics-textarea').value = localStorage.getItem(`studio_lyrics_${track.fileName}`) || '';
-      }
-      editor.classList.remove('hidden');
+      if (track) document.getElementById('lyrics-textarea').value = localStorage.getItem(`studio_lyrics_${track.fileName}`) || '';
     }
 
     document.getElementById('btn-toggle-paste').onclick = openLyricsEditor;
@@ -818,53 +777,39 @@
       state.lyricsLines = parseRawLyrics(raw, audio.duration);
       document.getElementById('lyrics-editor').classList.add('hidden');
       renderLyricsUI();
-      syncLyricsHighlight(audio.currentTime);
-    };
-    document.getElementById('btn-clear-lyrics').onclick = () => {
-      const track = state.tracks[state.currentIndex];
-      if (track) localStorage.removeItem(`studio_lyrics_${track.fileName}`);
-      state.lyricsLines = [];
-      document.getElementById('lyrics-textarea').value = '';
-      document.getElementById('lyrics-editor').classList.add('hidden');
-      renderLyricsUI();
+      renderPhoneticCoach();
     };
 
-    // =========================================================================
-    // TAB NAVIGATION (PLAYLIST vs GENIUS LYRICS)
-    // =========================================================================
+    // --- TAB SWITCHER ---
     function switchTab(tab) {
       state.activeTab = tab;
       const isPlaylist = tab === 'playlist';
+      const isLyrics = tab === 'lyrics';
+      const isCoach = tab === 'coach';
+
       document.getElementById('view-playlist').classList.toggle('hidden', !isPlaylist);
       document.getElementById('search-wrapper').classList.toggle('hidden', !isPlaylist);
-      document.getElementById('view-lyrics').classList.toggle('hidden', isPlaylist);
+      document.getElementById('view-lyrics').classList.toggle('hidden', !isLyrics);
+      document.getElementById('view-coach').classList.toggle('hidden', !isCoach);
 
-      const tPlay = document.getElementById('tab-playlist');
-      const tLyr = document.getElementById('tab-lyrics');
-      if (isPlaylist) {
-        tPlay.className = 'px-4 py-1.5 rounded-full text-xs font-semibold bg-saffron text-ink transition cursor-pointer';
-        tLyr.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer flex items-center gap-1.5';
-      } else {
-        tLyr.className = 'px-4 py-1.5 rounded-full text-xs font-semibold bg-saffron text-ink transition cursor-pointer flex items-center gap-1.5';
-        tPlay.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer';
-      }
+      document.getElementById('tab-playlist').className = isPlaylist ? 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-saffron text-ink transition cursor-pointer whitespace-nowrap' : 'px-3.5 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer whitespace-nowrap';
+      document.getElementById('tab-lyrics').className = isLyrics ? 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-saffron text-ink transition cursor-pointer whitespace-nowrap' : 'px-3.5 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer whitespace-nowrap';
+      document.getElementById('tab-coach').className = isCoach ? 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-saffron text-ink transition cursor-pointer whitespace-nowrap' : 'px-3.5 py-1.5 rounded-full text-xs font-semibold text-mute hover:text-cream transition cursor-pointer whitespace-nowrap';
     }
 
     document.getElementById('tab-playlist').onclick = () => switchTab('playlist');
     document.getElementById('tab-lyrics').onclick = () => switchTab('lyrics');
-    document.getElementById('mini-lyrics-btn').onclick = () => switchTab(state.activeTab === 'lyrics' ? 'playlist' : 'lyrics');
-    document.getElementById('sheet-open-lyrics').onclick = () => {
+    document.getElementById('tab-coach').onclick = () => switchTab('coach');
+    document.getElementById('mini-coach-btn').onclick = () => switchTab(state.activeTab === 'coach' ? 'playlist' : 'coach');
+    document.getElementById('sheet-open-coach').onclick = () => {
       document.getElementById('mobile-sheet').classList.add('hidden');
-      switchTab('lyrics');
+      switchTab('coach');
     };
 
-    // =========================================================================
-    // CORE PLAYER LOGIC
-    // =========================================================================
+    // --- CORE PLAYER ---
     function formatTime(sec) {
       if (!sec || isNaN(sec)) return '00:00';
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
+      const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
       return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
@@ -872,54 +817,34 @@
       const extMatch = fileName.match(/\.([^.]+)$/);
       const ext = extMatch ? extMatch[1].toUpperCase() : 'AUDIO';
       const title = fileName.replace(/\.[^.]+$/, '').replace(/[_]/g, ' ');
-      return {
-        id: idx + 1,
-        title,
-        fileName,
-        url: customUrl || `music/${encodeURIComponent(fileName)}`,
-        format: ext
-      };
+      return { id: idx + 1, title, fileName, url: customUrl || `music/${encodeURIComponent(fileName)}`, format: ext };
     }
 
     async function loadTracks() {
       const refreshIcon = document.getElementById('refresh-icon');
       refreshIcon.classList.add('animate-spin');
       let loaded = [];
-
       try {
         const host = window.location.hostname;
         const pathParts = window.location.pathname.split('/').filter(Boolean);
         if (host.endsWith('github.io') && pathParts.length > 0) {
-          const owner = host.split('.')[0];
-          const repo = pathParts[0];
-          const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/music`);
+          const res = await fetch(`https://api.github.com/repos/${host.split('.')[0]}/${pathParts[0]}/contents/music`);
           if (res.ok) {
             const items = await res.json();
-            const audioItems = items.filter(f => /\.(mp3|flac|wav|ogg|m4a)$/i.test(f.name));
-            loaded = audioItems.map((f, i) => parseFileToTrack(f.name, i));
+            loaded = items.filter(f => /\.(mp3|flac|wav|ogg|m4a)$/i.test(f.name)).map((f, i) => parseFileToTrack(f.name, i));
           }
         }
-      } catch (e) {
-        console.warn('Menggunakan daftar cadangan lokal');
-      }
-
-      if (loaded.length === 0) {
-        loaded = FALLBACK_FILES.map((name, i) => parseFileToTrack(name, i));
-      }
-
+      } catch (e) {}
+      if (loaded.length === 0) loaded = FALLBACK_FILES.map((name, i) => parseFileToTrack(name, i));
       state.tracks = loaded;
       applyFilter();
-      if (state.tracks.length > 0 && !audio.src) {
-        loadTrackAtIndex(0, false);
-      }
+      if (state.tracks.length > 0 && !audio.src) loadTrackAtIndex(0, false);
       refreshIcon.classList.remove('animate-spin');
     }
 
     function applyFilter() {
       const q = state.searchQuery.trim().toLowerCase();
-      state.filteredTracks = q
-        ? state.tracks.filter(t => t.title.toLowerCase().includes(q) || t.format.toLowerCase().includes(q))
-        : [...state.tracks];
+      state.filteredTracks = q ? state.tracks.filter(t => t.title.toLowerCase().includes(q) || t.format.toLowerCase().includes(q)) : [...state.tracks];
       renderPlaylist();
     }
 
@@ -927,44 +852,24 @@
       const container = document.getElementById('view-playlist');
       document.getElementById('track-count').textContent = state.filteredTracks.length;
       const activeTrack = state.tracks[state.currentIndex];
-
       if (state.filteredTracks.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 px-4 bg-panel/40 border border-dashed border-line rounded-3xl">
-            <p class="text-sm font-medium text-cream">Tidak ada lagu ditemukan</p>
-            <p class="text-xs text-mute mt-1">Pastikan file ada di folder <code class="text-saffron">music/</code> atau klik tombol <b>Buka Lokal</b>.</p>
-          </div>`;
+        container.innerHTML = `<div class="text-center py-12 px-4 bg-panel/40 border border-dashed border-line rounded-3xl"><p class="text-sm font-medium text-cream">Tidak ada lagu ditemukan</p></div>`;
         return;
       }
-
       container.innerHTML = state.filteredTracks.map((track, idx) => {
         const isSelected = activeTrack && activeTrack.id === track.id;
         return `
-          <div onclick="selectTrackById(${track.id})" class="group flex items-center justify-between gap-3 p-3.5 rounded-2xl border transition cursor-pointer active:scale-[0.99] ${
-            isSelected
-              ? 'bg-panel border-saffron/60 shadow-lg shadow-black/25'
-              : 'bg-panel/45 hover:bg-panel/80 border-line/60'
-          }">
+          <div onclick="selectTrackById(${track.id})" class="group flex items-center justify-between gap-3 p-3.5 rounded-2xl border transition cursor-pointer active:scale-[0.99] ${isSelected ? 'bg-panel border-saffron/60 shadow-lg' : 'bg-panel/45 hover:bg-panel/80 border-line/60'}">
             <div class="flex items-center gap-3.5 min-w-0">
-              <div class="size-9 rounded-xl grid place-items-center shrink-0 font-mono text-xs transition ${
-                isSelected ? 'bg-saffron text-ink font-bold' : 'bg-ink/80 text-mute group-hover:text-cream'
-              }">
-                ${isSelected && state.isPlaying
-                  ? `<div class="flex items-end gap-0.5 h-3.5">
-                       <span class="w-0.5 bg-ink eq-bar-1"></span>
-                       <span class="w-0.5 bg-ink eq-bar-2"></span>
-                       <span class="w-0.5 bg-ink eq-bar-3"></span>
-                     </div>`
-                  : idx + 1}
+              <div class="size-9 rounded-xl grid place-items-center shrink-0 font-mono text-xs ${isSelected ? 'bg-saffron text-ink font-bold' : 'bg-ink/80 text-mute'}">
+                ${isSelected && state.isPlaying ? '<div class="flex items-end gap-0.5 h-3.5"><span class="w-0.5 bg-ink eq-bar-1"></span><span class="w-0.5 bg-ink eq-bar-2"></span><span class="w-0.5 bg-ink eq-bar-3"></span></div>' : idx + 1}
               </div>
               <div class="min-w-0">
                 <p class="text-sm font-medium truncate ${isSelected ? 'text-saffron font-semibold' : 'text-cream'}">${track.title}</p>
                 <p class="text-[11px] text-mute truncate mt-0.5">${track.fileName}</p>
               </div>
             </div>
-            <span class="shrink-0 text-[10px] font-mono font-semibold px-2 py-1 rounded-md border ${
-              track.format === 'FLAC' ? 'bg-saffron/10 text-saffron border-saffron/30' : 'bg-ink text-mute border-line'
-            }">${track.format}</span>
+            <span class="shrink-0 text-[10px] font-mono font-semibold px-2 py-1 rounded-md border ${track.format === 'FLAC' ? 'bg-saffron/10 text-saffron border-saffron/30' : 'bg-ink text-mute border-line'}">${track.format}</span>
           </div>
         `;
       }).join('');
@@ -973,15 +878,12 @@
     function updatePlayerUI() {
       const track = state.tracks[state.currentIndex];
       if (!track) return;
-
       document.getElementById('mobile-mini-player').classList.remove('hidden');
       document.getElementById('desktop-title').textContent = track.title;
       document.getElementById('desktop-sub').textContent = `Track ${state.currentIndex + 1} dari ${state.tracks.length}`;
       document.getElementById('desktop-status').textContent = state.isPlaying ? 'NOW PLAYING' : 'PAUSED';
-      const dFmt = document.getElementById('desktop-format');
-      dFmt.textContent = track.format;
-      dFmt.classList.remove('hidden');
-
+      document.getElementById('desktop-format').textContent = track.format;
+      document.getElementById('desktop-format').classList.remove('hidden');
       document.getElementById('mini-title').textContent = track.title;
       document.getElementById('mini-format').textContent = track.format;
       document.getElementById('sheet-title').textContent = track.title;
@@ -989,27 +891,15 @@
       document.getElementById('sheet-format').textContent = track.format;
       document.getElementById('sheet-index').textContent = `${state.currentIndex + 1} / ${state.tracks.length}`;
 
-      ['desktop-vinyl', 'mini-vinyl', 'sheet-vinyl'].forEach(id => {
-        document.getElementById(id).setAttribute('data-playing', state.isPlaying);
-      });
-
+      ['desktop-vinyl', 'mini-vinyl', 'sheet-vinyl'].forEach(id => document.getElementById(id).setAttribute('data-playing', state.isPlaying));
       const iconHtml = state.isPlaying ? ICON_PAUSE : ICON_PLAY;
       ['desktop-play-icon', 'mini-play-icon', 'sheet-play-icon'].forEach(id => {
         const el = document.getElementById(id);
         el.innerHTML = iconHtml;
         el.classList.toggle('translate-x-0.5', !state.isPlaying);
       });
-
       document.getElementById('desktop-seek').disabled = false;
       renderPlaylist();
-
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: track.title,
-          artist: 'Studio Player',
-          album: `${track.format} Audio`
-        });
-      }
     }
 
     function loadTrackAtIndex(index, autoPlay = true) {
@@ -1019,19 +909,10 @@
       audio.src = track.url;
       audio.load();
       loadLyricsForTrack(track);
-
       if (autoPlay) {
         initAudioEngine();
-        audio.play().then(() => {
-          state.isPlaying = true;
-          updatePlayerUI();
-        }).catch(() => {
-          state.isPlaying = false;
-          updatePlayerUI();
-        });
-      } else {
-        updatePlayerUI();
-      }
+        audio.play().then(() => { state.isPlaying = true; updatePlayerUI(); }).catch(() => { state.isPlaying = false; updatePlayerUI(); });
+      } else { updatePlayerUI(); }
     }
 
     function selectTrackById(id) {
@@ -1042,79 +923,36 @@
     function togglePlay() {
       if (state.tracks.length === 0) return;
       initAudioEngine();
-      if (state.isPlaying) {
-        audio.pause();
-        state.isPlaying = false;
-        updatePlayerUI();
-      } else {
-        audio.play().then(() => {
-          state.isPlaying = true;
-          updatePlayerUI();
-        });
-      }
+      if (state.isPlaying) { audio.pause(); state.isPlaying = false; updatePlayerUI(); }
+      else { audio.play().then(() => { state.isPlaying = true; updatePlayerUI(); }); }
     }
 
     function nextTrack() {
       if (state.tracks.length === 0) return;
-      if (state.repeatMode === 'one') {
-        audio.currentTime = 0;
-        audio.play();
-        return;
-      }
-      let next = 0;
-      if (state.isShuffle && state.tracks.length > 1) {
-        do { next = Math.floor(Math.random() * state.tracks.length); } while (next === state.currentIndex);
-      } else {
-        if (state.currentIndex === state.tracks.length - 1 && state.repeatMode === 'off') {
-          state.isPlaying = false;
-          updatePlayerUI();
-          return;
-        }
-        next = (state.currentIndex + 1) % state.tracks.length;
-      }
+      if (state.repeatMode === 'one') { audio.currentTime = 0; audio.play(); return; }
+      let next = state.isShuffle ? Math.floor(Math.random() * state.tracks.length) : (state.currentIndex + 1) % state.tracks.length;
       loadTrackAtIndex(next, true);
     }
 
     function prevTrack() {
       if (state.tracks.length === 0) return;
-      if (audio.currentTime > 3) {
-        audio.currentTime = 0;
-        return;
-      }
-      const prev = (state.currentIndex - 1 + state.tracks.length) % state.tracks.length;
-      loadTrackAtIndex(prev, true);
+      if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+      loadTrackAtIndex((state.currentIndex - 1 + state.tracks.length) % state.tracks.length, true);
     }
 
-    // Re-kalkulasi durasi lirik setelah metadata audio selesai dimuat
-    audio.addEventListener('loadedmetadata', () => {
-      const track = state.tracks[state.currentIndex];
-      if (track) {
-        const savedRaw = localStorage.getItem(`studio_lyrics_${track.fileName}`);
-        if (savedRaw) {
-          state.lyricsLines = parseRawLyrics(savedRaw, audio.duration);
-        }
-      }
-    });
-
     audio.addEventListener('timeupdate', () => {
-      const cur = audio.currentTime || 0;
-      const dur = audio.duration || 0;
+      const cur = audio.currentTime || 0, dur = audio.duration || 0;
       const pct = dur > 0 ? (cur / dur) * 100 : 0;
-
       ['desktop-seek', 'sheet-seek'].forEach(id => {
         const el = document.getElementById(id);
-        el.max = dur;
-        el.value = cur;
-        el.style.setProperty('--p', `${pct}%`);
+        el.max = dur; el.value = cur; el.style.setProperty('--p', `${pct}%`);
       });
-
       document.getElementById('mini-progress').style.width = `${pct}%`;
       document.getElementById('desktop-current').textContent = formatTime(cur);
       document.getElementById('desktop-duration').textContent = formatTime(dur);
       document.getElementById('sheet-current').textContent = formatTime(cur);
       document.getElementById('sheet-duration').textContent = formatTime(dur);
       document.getElementById('mini-time').textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
-
       syncLyricsHighlight(cur);
     });
 
@@ -1131,62 +969,12 @@
     ['desktop-next', 'mini-next', 'sheet-next'].forEach(id => document.getElementById(id).onclick = nextTrack);
     ['desktop-prev', 'sheet-prev'].forEach(id => document.getElementById(id).onclick = prevTrack);
 
-    function toggleShuffle() {
-      state.isShuffle = !state.isShuffle;
-      ['desktop-shuffle', 'sheet-shuffle'].forEach(id => {
-        const el = document.getElementById(id);
-        el.classList.toggle('text-saffron', state.isShuffle);
-        el.classList.toggle('bg-saffron/15', state.isShuffle);
-        el.classList.toggle('text-mute', !state.isShuffle);
-      });
-    }
-    ['desktop-shuffle', 'sheet-shuffle'].forEach(id => document.getElementById(id).onclick = toggleShuffle);
-
-    function cycleRepeat() {
-      state.repeatMode = state.repeatMode === 'off' ? 'all' : state.repeatMode === 'all' ? 'one' : 'off';
-      ['desktop-repeat', 'sheet-repeat'].forEach(id => {
-        const el = document.getElementById(id);
-        const active = state.repeatMode !== 'off';
-        el.classList.toggle('text-saffron', active);
-        el.classList.toggle('bg-saffron/15', active);
-        el.classList.toggle('text-mute', !active);
-      });
-      ['desktop-repeat-badge', 'sheet-repeat-badge'].forEach(id => {
-        document.getElementById(id).classList.toggle('hidden', state.repeatMode !== 'one');
-      });
-    }
-    ['desktop-repeat', 'sheet-repeat'].forEach(id => document.getElementById(id).onclick = cycleRepeat);
-
-    // Mobile Sheet Open/Close & Swipe Down Gesture
+    // Mobile Sheet
     const mobileSheet = document.getElementById('mobile-sheet');
     document.getElementById('mini-expand-trigger').onclick = () => mobileSheet.classList.remove('hidden');
     document.getElementById('sheet-close').onclick = () => mobileSheet.classList.add('hidden');
 
-    let touchStartY = 0;
-    mobileSheet.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
-    mobileSheet.addEventListener('touchend', (e) => {
-      const deltaY = e.changedTouches[0].clientY - touchStartY;
-      if (deltaY > 110 && mobileSheet.scrollTop === 0) {
-        mobileSheet.classList.add('hidden');
-      }
-    }, { passive: true });
-
-    // Search
-    const searchInput = document.getElementById('search-input');
-    const searchClear = document.getElementById('search-clear');
-    searchInput.addEventListener('input', (e) => {
-      state.searchQuery = e.target.value;
-      searchClear.classList.toggle('hidden', !state.searchQuery);
-      applyFilter();
-    });
-    searchClear.onclick = () => {
-      searchInput.value = '';
-      state.searchQuery = '';
-      searchClear.classList.add('hidden');
-      applyFilter();
-    };
-
-    // Local File Picker
+    // Local file picker
     document.getElementById('local-file-input').addEventListener('change', (e) => {
       const files = Array.from(e.target.files || []);
       if (files.length === 0) return;
@@ -1194,23 +982,6 @@
       applyFilter();
       loadTrackAtIndex(0, true);
     });
-
-    // Keyboard Shortcuts
-    window.addEventListener('keydown', (e) => {
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-      if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-      else if (e.code === 'ArrowRight') audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5);
-      else if (e.code === 'ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime - 5);
-      else if (e.key.toLowerCase() === 'm') setMasterVolume(audio.muted || audio.volume === 0 ? 1 : 0);
-    });
-
-    // Lock Screen Controls
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', togglePlay);
-      navigator.mediaSession.setActionHandler('pause', togglePlay);
-      navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
-      navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
-    }
 
     document.getElementById('btn-refresh').onclick = loadTracks;
     loadTracks();
